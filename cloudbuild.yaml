@@ -1,0 +1,64 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    secretEnv: ['NEXT_PUBLIC_FIREBASE_APIKEY','NEXT_PUBLIC_FIREBASE_APPID','NEXT_PUBLIC_FIREBASE_AUTHDOMAIN','NEXT_PUBLIC_FIREBASE_MEASUREMENTID','NEXT_PUBLIC_FIREBASE_MESSAGINGSENDERID','NEXT_PUBLIC_FIREBASE_PROJECTID','NEXT_PUBLIC_FIREBASE_STORAGEBUCKET']
+    args:
+      - '-c'
+      - |
+        docker build --no-cache -t $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA . -f Dockerfile \
+        --build-arg _NEXT_PUBLIC_FIREBASE_APIKEY=$$NEXT_PUBLIC_FIREBASE_APIKEY \
+        --build-arg _NEXT_PUBLIC_FIREBASE_AUTHDOMAIN=$$NEXT_PUBLIC_FIREBASE_AUTHDOMAIN \
+        --build-arg _NEXT_PUBLIC_FIREBASE_PROJECTID=$$NEXT_PUBLIC_FIREBASE_PROJECTID \
+        --build-arg _NEXT_PUBLIC_FIREBASE_STORAGEBUCKET=$$NEXT_PUBLIC_FIREBASE_STORAGEBUCKET \
+        --build-arg _NEXT_PUBLIC_FIREBASE_MESSAGINGSENDERID=$$NEXT_PUBLIC_FIREBASE_MESSAGINGSENDERID \
+        --build-arg _NEXT_PUBLIC_FIREBASE_APPID=$$NEXT_PUBLIC_FIREBASE_APPID \
+        --build-arg _NEXT_PUBLIC_FIREBASE_MEASUREMENTID=$$NEXT_PUBLIC_FIREBASE_MEASUREMENTID
+    id: Build
+
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        docker push $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+    id: Push
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud run services update $_SERVICE_NAME \
+        --platform=managed \
+        --image=$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA \
+        --labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID \
+        --region=$_DEPLOY_REGION \
+        --quiet
+    id: Deploy
+
+images:
+  - >-
+    $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+options:
+  substitutionOption: ALLOW_LOOSE
+  logging: CLOUD_LOGGING_ONLY
+tags:
+  - gcp-cloud-build-deploy-cloud-run
+  - gcp-cloud-build-deploy-cloud-run-managed
+  - ogt-home-platform-front
+availableSecrets:
+  secretManager:
+  - versionName: projects/ogthomeplatform/secrets/NEXT_PUBLIC_FIREBASE_APIKEY/versions/1
+    env: 'NEXT_PUBLIC_FIREBASE_APIKEY'
+  - versionName: projects/ogthomeplatform/secrets/NEXT_PUBLIC_FIREBASE_APPID/versions/1
+    env: 'NEXT_PUBLIC_FIREBASE_APPID'
+  - versionName: projects/ogthomeplatform/secrets/NEXT_PUBLIC_FIREBASE_AUTHDOMAIN/versions/1
+    env: 'NEXT_PUBLIC_FIREBASE_AUTHDOMAIN'
+  - versionName: projects/ogthomeplatform/secrets/NEXT_PUBLIC_FIREBASE_MEASUREMENTID/versions/1
+    env: 'NEXT_PUBLIC_FIREBASE_MEASUREMENTID'
+  - versionName: projects/ogthomeplatform/secrets/NEXT_PUBLIC_FIREBASE_MESSAGINGSENDERID/versions/1
+    env: 'NEXT_PUBLIC_FIREBASE_MESSAGINGSENDERID'
+  - versionName: projects/ogthomeplatform/secrets/NEXT_PUBLIC_FIREBASE_PROJECTID/versions/1
+    env: 'NEXT_PUBLIC_FIREBASE_PROJECTID'
+  - versionName: projects/ogthomeplatform/secrets/NEXT_PUBLIC_FIREBASE_STORAGEBUCKET/versions/1
+    env: 'NEXT_PUBLIC_FIREBASE_STORAGEBUCKET'
