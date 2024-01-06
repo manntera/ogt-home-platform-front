@@ -1,4 +1,4 @@
-import { Box, Tooltip, Typography, makeStyles } from '@mui/material';
+import { Box, Tooltip, Typography } from '@mui/material';
 
 type Props = {
     sizex: number;
@@ -9,10 +9,9 @@ type Props = {
     style: React.CSSProperties;
 };
 
-
 export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, color, style }) => {
-    if (toolTipText == null) {
-        return (
+    return (
+        <Tooltip title={toolTipText ?? ''} placement="top-end">
             <Box
                 sx={{
                     width: sizex,
@@ -24,26 +23,8 @@ export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, col
                 }}
                 style={style}
             >
-                <Typography sx={{ userSelect: 'none' }}> {text}</Typography>
+                <Typography sx={{ userSelect: 'none' }}>{text}</Typography>
             </Box>
-        );
-    } else {
-        return (
-            <Tooltip title={toolTipText} placement="top-end">
-                <Box
-                    sx={{
-                        width: sizex,
-                        height: sizey,
-                        bgcolor: color,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                    style={style}
-                >
-                    <Typography sx={{ userSelect: 'none' }}> {text}</Typography>
-                </Box>
-            </Tooltip>
-        );
-    }
+        </Tooltip>
+    );
 };
