@@ -115,7 +115,7 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
                         var outlineColor = "#FFFFFF";
                         var outlineSize = 0;
                         if (targetHealth.comment != "") {
-                            outlineSize = 2;
+                            outlineSize = 1;
                         }
                         tileItemInfos[i].push({ text: targetHealth.healthScore.toString(), color: rgbToHex(hslToRgb("hsl(" + h.toString() + ",100," + l.toString() + ")")), toolTipText: targetHealth.comment, outlineColor: outlineColor, outlineSize: outlineSize });
                         searchStartTime += 3600;
