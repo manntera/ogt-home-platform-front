@@ -6,10 +6,12 @@ type Props = {
     text: string;
     toolTipText: string | null;
     color: string;
+    outlineColor: string;
+    OutlineSize: number;
     style: React.CSSProperties;
 };
 
-export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, color, style }) => {
+export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, color, outlineColor, OutlineSize, style }) => {
     return (
         <Tooltip title={toolTipText ?? ''} placement="top-end">
             <Box
@@ -20,7 +22,7 @@ export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, col
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    border: toolTipText ? '1px solid white' : 'none', // 枠線の追加
+                    border: `${OutlineSize}px solid ${outlineColor}`,
                 }}
                 style={style}
             >
