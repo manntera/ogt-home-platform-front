@@ -1,4 +1,4 @@
-import { Box, Tooltip, Typography } from '@mui/material';
+import { Box, Tooltip, Typography, makeStyles } from '@mui/material';
 
 type Props = {
     sizex: number;
@@ -8,6 +8,7 @@ type Props = {
     color: string;
     style: React.CSSProperties;
 };
+
 
 export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, color, style }) => {
     if (toolTipText == null) {
@@ -23,7 +24,7 @@ export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, col
                 }}
                 style={style}
             >
-                <Typography> {text}</Typography>
+                <Typography sx={{ userSelect: 'none' }}> {text}</Typography>
             </Box>
         );
     } else {
@@ -40,7 +41,7 @@ export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, col
                     }}
                     style={style}
                 >
-                    <Typography> {text}</Typography>
+                    <Typography sx={{ userSelect: 'none' }}> {text}</Typography>
                 </Box>
             </Tooltip>
         );
