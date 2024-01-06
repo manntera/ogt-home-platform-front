@@ -4,6 +4,7 @@ import { TileItem } from './TileItem';
 export type TileItemInfo = {
     text: string;
     color: string;
+    toolTipText: string | null;
 };
 
 type Props = {
@@ -24,6 +25,7 @@ export const TileGrid: React.FC<Props> = ({ tileSizeX, tileSizeY, tileItemInfos,
                             sizex={tileSizeX}
                             sizey={tileSizeY}
                             text={tileItemInfo.text}
+                            toolTipText={tileItemInfo.toolTipText === null ? null : tileItemInfo?.toolTipText}
                             color={tileItemInfo.color}
                             style={{ marginBottom: margin, marginRight: margin }}
                         />

@@ -51,7 +51,7 @@ export const DataViewer = () => {
 
                 for (var i = 0; i < dayCount; i++) {
                     tileItemInfos.push([]);
-                    tileItemInfos[i].push({ text: (i + 1).toString(), color: alpha("#000000", 0) });
+                    tileItemInfos[i].push({ text: (i + 1).toString(), color: alpha("#000000", 0), toolTipText: null });
                     const weekDay = (firstWeekDay + i) % 7;
                     let weekDayText = "";
                     switch (weekDay) {
@@ -77,17 +77,17 @@ export const DataViewer = () => {
                             weekDayText = "土";
                             break;
                     }
-                    tileItemInfos[i].push({ text: weekDayText, color: alpha("#000000", 0) });
+                    tileItemInfos[i].push({ text: weekDayText, color: alpha("#000000", 0), toolTipText: null });
                     for (var j = 0; j < 24; j++) {
                         if (healthQueue.length == 0) {
-                            tileItemInfos[i].push({ text: "", color: alpha("#AAAAAA", 1) });
+                            tileItemInfos[i].push({ text: "", color: alpha("#AAAAAA", 1), toolTipText: null });
                             searchStartTime += 3600;
                             searchEndTime += 3600;
                             continue;
                         }
 
                         if (healthQueue.front.timestamp >= searchEndTime) {
-                            tileItemInfos[i].push({ text: "", color: alpha("#AAAAAA", 1) });
+                            tileItemInfos[i].push({ text: "", color: alpha("#AAAAAA", 1), toolTipText: null });
                             searchStartTime += 3600;
                             searchEndTime += 3600;
                             continue;
@@ -109,7 +109,7 @@ export const DataViewer = () => {
                             h = 210;
                         }
                         var l = 100 - Math.abs(targetHealth.healthScore) * 10;
-                        tileItemInfos[i].push({ text: targetHealth.healthScore.toString(), color: rgbToHex(hslToRgb("hsl(" + h.toString() + ",100," + l.toString() + ")")) });
+                        tileItemInfos[i].push({ text: targetHealth.healthScore.toString(), color: rgbToHex(hslToRgb("hsl(" + h.toString() + ",100," + l.toString() + ")")), toolTipText: targetHealth.comment });
                         searchStartTime += 3600;
                         searchEndTime += 3600;
                     }
