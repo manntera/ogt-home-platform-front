@@ -40,6 +40,20 @@ export type HealthAddResponse = {
     healthScore: number;
     comment: string;
 }
+
+export type HealthGetRequest = {
+    userId: string;
+    startTime: number;
+    endTime: number;
+}
+
+export type HealthGetResponse = {
+    id: string;
+    timestamp: number;
+    healthScore: number;
+    comment: string;
+}
+
 export const usePostApi = <PayloadType, ResponseType>(apiUrl: string) => {
     const submitData
         = useCallback(async (payload: PayloadType): Promise<ResponseType> => {
