@@ -20,6 +20,7 @@ export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, col
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    border: toolTipText ? '1px solid white' : 'none', // 枠線の追加
                 }}
                 style={style}
             >
