@@ -35,6 +35,7 @@ export const DataViewer = () => {
                 const now = new Date();
                 const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
                 const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1);
+                const firstWeekDay = firstDayOfMonth.getDay();
                 const startTime = Math.floor(firstDayOfMonth.getTime() / 1000);
                 const endTime = Math.floor(lastDayOfMonth.getTime() / 1000);
                 const dayCount = (endTime - startTime) / 86400;
@@ -51,7 +52,32 @@ export const DataViewer = () => {
                 for (var i = 0; i < dayCount; i++) {
                     tileItemInfos.push([]);
                     tileItemInfos[i].push({ text: (i + 1).toString(), color: alpha("#000000", 0) });
-                    tileItemInfos[i].push({ text: "曜", color: alpha("#000000", 0) });
+                    const weekDay = (firstWeekDay + i) % 7;
+                    let weekDayText = "";
+                    switch (weekDay) {
+                        case 0:
+                            weekDayText = "日";
+                            break;
+                        case 1:
+                            weekDayText = "月";
+                            break;
+                        case 2:
+                            weekDayText = "火";
+                            break;
+                        case 3:
+                            weekDayText = "水";
+                            break;
+                        case 4:
+                            weekDayText = "木";
+                            break;
+                        case 5:
+                            weekDayText = "金";
+                            break;
+                        case 6:
+                            weekDayText = "土";
+                            break;
+                    }
+                    tileItemInfos[i].push({ text: weekDayText, color: alpha("#000000", 0) });
                     for (var j = 0; j < 24; j++) {
                         if (healthQueue.length == 0) {
                             tileItemInfos[i].push({ text: "", color: alpha("#AAAAAA", 1) });
