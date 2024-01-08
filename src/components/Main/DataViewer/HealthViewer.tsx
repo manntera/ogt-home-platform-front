@@ -84,7 +84,7 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
                         break;
                     }
                 }
-                var outlineColor = "#FFFFFF";
+                var outlineColor = "#000000";
                 var outlineSize = 0;
                 if (targetHealth.comment != "") {
                     outlineSize = 1;
