@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { HealthViewer } from './HealthViewer';
-import Button from '@mui/material/Button';
+import { Grid, Button, Typography, IconButton } from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
+
 
 export const DataViewer = () => {
     const [year, setYear] = useState<number>(new Date().getFullYear());
@@ -29,13 +32,31 @@ export const DataViewer = () => {
 
     return (
         <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Button onClick={decrementYear}>前の年</Button>
-                <Button onClick={decrementMonth}>前の月</Button>
-                <span>{year}年 {month}月</span>
-                <Button onClick={incrementMonth}>次の月</Button>
-                <Button onClick={incrementYear}>次の年</Button>
-            </div>
+            <Grid container spacing={2} justifyContent="center" alignItems="center">
+                <Grid item>
+                    <IconButton onClick={decrementYear} size="large">
+                        <ArrowBackIosNewIcon />
+                    </IconButton>
+                </Grid>
+                <Grid item>
+                    <IconButton onClick={decrementMonth} size="large">
+                        <ArrowBackIosNewIcon />
+                    </IconButton>
+                </Grid>
+                <Grid item>
+                    <Typography variant="h6">{year}年 {month}月</Typography>
+                </Grid>
+                <Grid item>
+                    <IconButton onClick={incrementMonth} size="large">
+                        <ArrowForwardIos />
+                    </IconButton>
+                </Grid>
+                <Grid item>
+                    <IconButton onClick={incrementYear} size="large">
+                        <ArrowForwardIos />
+                    </IconButton>
+                </Grid>
+            </Grid>
             <HealthViewer year={year} month={month} />
         </div>
     );
