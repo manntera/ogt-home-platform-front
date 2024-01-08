@@ -5,9 +5,24 @@ import { TileGrid, TileItemInfo } from './TileGrid';
 import { alpha, hslToRgb, rgbToHex } from '@mui/material';
 import { Queue } from 'queue-typescript';
 
+const SECONDS_IN_HOUR = 3600;
+const HOURS_IN_DAY = 24;
+const MAX_HEALTH_SCORE = 100;
+
 type Props = {
     year: number;
     month: number;
+}
+
+function getWeekDayText(weekDay: number): string {
+    const weekDays = ["日", "月", "火", "水", "木", "金", "土"];
+    return weekDays[weekDay];
+}
+
+function createHealthColor(healthScore: number): string {
+    const hue = healthScore < 0 ? 210 : 60;
+    const lightness = MAX_HEALTH_SCORE - Math.abs(healthScore) * 10;
+    return rgbToHex(hslToRgb(`hsl(${hue},100%,${lightness}%)`));
 }
 
 export const HealthViewer: React.FC<Props> = ({ year, month }) => {
@@ -36,8 +51,8 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
                 const currentUser = getCurrentUser();
                 if (!currentUser) return;
 
-                const firstDayOfMonth = new Date(year, month, 1);
-                const lastDayOfMonth = new Date(year, month + 1);
+                const firstDayOfMonth = new Date(year, month - 1, 1);
+                const lastDayOfMonth = new Date(year, month);
                 const firstWeekDay = firstDayOfMonth.getDay();
                 const startTime = Math.floor(firstDayOfMonth.getTime() / 1000);
                 const endTime = Math.floor(lastDayOfMonth.getTime() / 1000);
@@ -45,54 +60,35 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
 
                 const request = { userId: currentUser.uid, startTime: startTime, endTime: endTime };
                 const healthData = await submitGetHealth(request);
+
                 var searchStartTime = startTime;
-                var searchEndTime = startTime + 3600;
+                var searchEndTime = startTime + SECONDS_IN_HOUR;
 
                 var tileItemInfos: (TileItemInfo)[][] = [[]];
 
-                let healthQueue = new Queue<HealthGetResponse>(...healthData);
+                let healthQueue = new Queue<HealthGetResponse>();
+                if (healthData != null && healthData.length != 0) {
+                    healthQueue = new Queue<HealthGetResponse>(...healthData);
+                }
 
                 for (var i = 0; i < dayCount; i++) {
                     tileItemInfos.push([]);
                     tileItemInfos[i].push({ text: (i + 1).toString(), color: alpha("#000000", 0), toolTipText: null, outlineColor: "#000000", outlineSize: 0 });
                     const weekDay = (firstWeekDay + i) % 7;
-                    let weekDayText = "";
-                    switch (weekDay) {
-                        case 0:
-                            weekDayText = "日";
-                            break;
-                        case 1:
-                            weekDayText = "月";
-                            break;
-                        case 2:
-                            weekDayText = "火";
-                            break;
-                        case 3:
-                            weekDayText = "水";
-                            break;
-                        case 4:
-                            weekDayText = "木";
-                            break;
-                        case 5:
-                            weekDayText = "金";
-                            break;
-                        case 6:
-                            weekDayText = "土";
-                            break;
-                    }
-                    tileItemInfos[i].push({ text: weekDayText, color: alpha("#000000", 0), toolTipText: null, outlineColor: "#000000", outlineSize: 0 });
-                    for (var j = 0; j < 24; j++) {
+
+                    tileItemInfos[i].push({ text: getWeekDayText(weekDay), color: alpha("#000000", 0), toolTipText: null, outlineColor: "#000000", outlineSize: 0 });
+                    for (var j = 0; j < HOURS_IN_DAY; j++) {
                         if (healthQueue.length == 0) {
                             tileItemInfos[i].push({ text: "", color: alpha("#AAAAAA", 1), toolTipText: null, outlineColor: "#000000", outlineSize: 0 });
-                            searchStartTime += 3600;
-                            searchEndTime += 3600;
+                            searchStartTime += SECONDS_IN_HOUR;
+                            searchEndTime += SECONDS_IN_HOUR;
                             continue;
                         }
 
                         if (healthQueue.front.timestamp >= searchEndTime) {
                             tileItemInfos[i].push({ text: "", color: alpha("#AAAAAA", 1), toolTipText: null, outlineColor: "#000000", outlineSize: 0 });
-                            searchStartTime += 3600;
-                            searchEndTime += 3600;
+                            searchStartTime += SECONDS_IN_HOUR;
+                            searchEndTime += SECONDS_IN_HOUR;
                             continue;
                         }
                         var targetHealth: HealthGetResponse = healthQueue.front;
@@ -107,19 +103,15 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
                                 break;
                             }
                         }
-                        var h = 60;
-                        if (targetHealth.healthScore < 0) {
-                            h = 210;
-                        }
-                        var l = 100 - Math.abs(targetHealth.healthScore) * 10;
                         var outlineColor = "#FFFFFF";
                         var outlineSize = 0;
                         if (targetHealth.comment != "") {
                             outlineSize = 1;
                         }
-                        tileItemInfos[i].push({ text: targetHealth.healthScore.toString(), color: rgbToHex(hslToRgb("hsl(" + h.toString() + ",100," + l.toString() + ")")), toolTipText: targetHealth.comment, outlineColor: outlineColor, outlineSize: outlineSize });
-                        searchStartTime += 3600;
-                        searchEndTime += 3600;
+                        const healthColor = createHealthColor(targetHealth.healthScore);
+                        tileItemInfos[i].push({ text: targetHealth.healthScore.toString(), color: healthColor, toolTipText: targetHealth.comment, outlineColor: outlineColor, outlineSize: outlineSize });
+                        searchStartTime += SECONDS_IN_HOUR;
+                        searchEndTime += SECONDS_IN_HOUR;
                     }
                 }
                 setTileItemInfos(tileItemInfos);
@@ -131,7 +123,7 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
 
         fetchUserData();
         fetchHealthData();
-    }, []);
+    }, [year, month]);
 
     if (userData === null || tileItemInfos.length === 0) {
         return (
