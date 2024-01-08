@@ -3,14 +3,17 @@ import { usePostApi, HealthGetRequest, HealthGetResponse, HealthApiUrl } from '@
 import { getCurrentUser } from '@/lib/firebase/firebaseAuth';
 
 export const useHealthData = (year: number, month: number) => {
+    const { submitData: submitGetHealth } = usePostApi<HealthGetRequest, HealthGetResponse[]>(HealthApiUrl + "get");
+
     const [healthData, setHealthData] = useState<HealthGetResponse[]>([]);
     const [error, setError] = useState<string>('');
-
-    const { submitData: submitGetHealth } = usePostApi<HealthGetRequest, HealthGetResponse[]>(HealthApiUrl + "get");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchHealthData = async () => {
             try {
+                console.log("useHealthData start");
+                setIsLoading(true);
                 const currentUser = getCurrentUser();
                 if (!currentUser) throw new Error('ユーザーが見つかりません。');
 
@@ -29,11 +32,14 @@ export const useHealthData = (year: number, month: number) => {
                 setHealthData(response);
             } catch (error) {
                 setError('体調情報の取得に失敗しました。');
+                console.log("useHealthData end");
+            } finally {
+                setIsLoading(false);
             }
         };
 
         fetchHealthData();
     }, [year, month, submitGetHealth]);
 
-    return { healthData, error };
+    return { healthData, error, isLoading };
 };

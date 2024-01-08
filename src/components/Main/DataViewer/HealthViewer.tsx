@@ -27,14 +27,12 @@ function createHealthColor(healthScore: number): string {
 }
 
 export const HealthViewer: React.FC<Props> = ({ year, month }) => {
-    const { userData, error: userError } = useUserData();
-    const { healthData, error: healthError } = useHealthData(year, month);
+    const { userData, error: userError, isLoading: isUserLoading } = useUserData();
+    const { healthData, error: healthError, isLoading: isHealthLoading } = useHealthData(year, month);
+
     const [tileItemInfos, setTileItemInfos] = useState<TileItemInfo[][]>([]);
-    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        setIsLoading(true);
-
         const firstDayOfMonth = new Date(year, month - 1, 1);
         const lastDayOfMonth = new Date(year, month);
         const firstWeekDay = firstDayOfMonth.getDay();
@@ -97,7 +95,6 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
             }
             setTileItemInfos(tileItemInfos);
         };
-        setIsLoading(false);
     }, [healthData]);
 
     if (userError) {
@@ -108,7 +105,7 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
         return <div><p>健康情報の取得にエラーが発生しました。</p></div>;
     }
 
-    if (healthData == null || isLoading) {
+    if (isUserLoading || isHealthLoading) {
         return <div><p>データを取得中です。</p></div>;
     }
 
