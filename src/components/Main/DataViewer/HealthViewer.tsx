@@ -33,7 +33,8 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        setIsLoading(false);
+        setIsLoading(true);
+
         const firstDayOfMonth = new Date(year, month - 1, 1);
         const lastDayOfMonth = new Date(year, month);
         const firstWeekDay = firstDayOfMonth.getDay();
@@ -51,22 +52,23 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
             healthQueue = new Queue<HealthGetResponse>(...healthData);
         }
 
-        for (var i = 0; i < dayCount; i++) {
+        for (var dayIndex = 0; dayIndex < dayCount; dayIndex++) {
             tileItemInfos.push([]);
-            tileItemInfos[i].push({ text: (i + 1).toString(), color: alpha("#000000", 0), toolTipText: null, outlineColor: "#000000", outlineSize: 0 });
-            const weekDay = (firstWeekDay + i) % 7;
+            const dayTileItemInfos = tileItemInfos[dayIndex]
+            dayTileItemInfos.push({ text: (dayIndex + 1).toString(), color: alpha("#000000", 0), toolTipText: null, outlineColor: "#000000", outlineSize: 0 });
+            const weekDay = (firstWeekDay + dayIndex) % 7;
 
-            tileItemInfos[i].push({ text: getWeekDayText(weekDay), color: alpha("#000000", 0), toolTipText: null, outlineColor: "#000000", outlineSize: 0 });
-            for (var j = 0; j < HOURS_IN_DAY; j++) {
+            dayTileItemInfos.push({ text: getWeekDayText(weekDay), color: alpha("#000000", 0), toolTipText: null, outlineColor: "#000000", outlineSize: 0 });
+            for (var hourIndex = 0; hourIndex < HOURS_IN_DAY; hourIndex++) {
                 if (healthQueue.length == 0) {
-                    tileItemInfos[i].push({ text: "", color: alpha("#AAAAAA", 1), toolTipText: null, outlineColor: "#000000", outlineSize: 0 });
+                    dayTileItemInfos.push({ text: "", color: alpha("#AAAAAA", 1), toolTipText: null, outlineColor: "#000000", outlineSize: 0 });
                     searchStartTime += SECONDS_IN_HOUR;
                     searchEndTime += SECONDS_IN_HOUR;
                     continue;
                 }
 
                 if (healthQueue.front.timestamp >= searchEndTime) {
-                    tileItemInfos[i].push({ text: "", color: alpha("#AAAAAA", 1), toolTipText: null, outlineColor: "#000000", outlineSize: 0 });
+                    dayTileItemInfos.push({ text: "", color: alpha("#AAAAAA", 1), toolTipText: null, outlineColor: "#000000", outlineSize: 0 });
                     searchStartTime += SECONDS_IN_HOUR;
                     searchEndTime += SECONDS_IN_HOUR;
                     continue;
@@ -89,7 +91,7 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
                     outlineSize = 1;
                 }
                 const healthColor = createHealthColor(targetHealth.healthScore);
-                tileItemInfos[i].push({ text: targetHealth.healthScore.toString(), color: healthColor, toolTipText: targetHealth.comment, outlineColor: outlineColor, outlineSize: outlineSize });
+                dayTileItemInfos.push({ text: targetHealth.healthScore.toString(), color: healthColor, toolTipText: targetHealth.comment, outlineColor: outlineColor, outlineSize: outlineSize });
                 searchStartTime += SECONDS_IN_HOUR;
                 searchEndTime += SECONDS_IN_HOUR;
             }
@@ -98,18 +100,24 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
         setIsLoading(false);
     }, [healthData]);
 
-    if (isLoading) {
+    if (userError) {
+        return <div><p>ユーザー情報の認証にエラーが発生しました。</p></div>;
+    }
+
+    if (healthError) {
+        return <div><p>健康情報の取得にエラーが発生しました。</p></div>;
+    }
+
+    if (healthData == null || isLoading) {
         return <div><p>データを取得中です。</p></div>;
     }
 
-    if (userError || healthError) {
-        return <div><p>エラーが発生しました。</p></div>;
-    }
-
     const nullTile = { text: "", color: alpha("#000000", 0), toolTipText: null, outlineColor: "#000000", outlineSize: 0 };
+
     const hourTile = (hour: { toString: () => string; }) => {
         return { text: hour + "時", color: alpha("#000000", 0), toolTipText: null, outlineColor: "#000000", outlineSize: 0 };
     }
+
     return (
         <div style={{ display: 'flex', flexDirection: 'row' }}>
             <TileGrid
