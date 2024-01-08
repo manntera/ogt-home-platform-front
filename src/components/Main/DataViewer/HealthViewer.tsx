@@ -6,6 +6,7 @@ import { alpha, rgbToHex, hslToRgb } from '@mui/material';
 import { Queue } from 'queue-typescript';
 import { HealthGetResponse } from '@/hooks/usePostApi';
 
+const SECONDS_IN_DAY = 86400;
 const SECONDS_IN_HOUR = 3600;
 const HOURS_IN_DAY = 24;
 const MAX_HEALTH_SCORE = 100;
@@ -38,7 +39,7 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
         const firstWeekDay = firstDayOfMonth.getDay();
         const startTime = Math.floor(firstDayOfMonth.getTime() / 1000);
         const endTime = Math.floor(lastDayOfMonth.getTime() / 1000);
-        const dayCount = (endTime - startTime) / 86400;
+        const dayCount = (endTime - startTime) / SECONDS_IN_DAY;
 
         var searchStartTime = startTime;
         var searchEndTime = startTime + SECONDS_IN_HOUR;
