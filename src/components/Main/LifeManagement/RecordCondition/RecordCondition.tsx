@@ -13,6 +13,7 @@ type RecordConditionProps = {
 export const RecordCondition: React.FC<RecordConditionProps> = ({ user }) => {
     const [conditionScore, setConditionScore] = useState(0);
     const [conditionComment, setConditionComment] = useState('');
+    const [timestamp, setTimestamp] = useState(new Date().getTime());
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [submitError, setSubmitError] = useState('');
@@ -20,6 +21,7 @@ export const RecordCondition: React.FC<RecordConditionProps> = ({ user }) => {
     const { submitData: submitGetUser } = usePostApi<UserGetRequest, UserGetResponse>(UserApiUrl + "get");
     const { submitData: submitAddHealth } = usePostApi<HelathAddRequest, HealthAddResponse>(HealthApiUrl + "add");
 
+    console.log(timestamp);
     const handleSubmit = async () => {
         setIsSubmitting(true);
         setSubmitSuccess(false);
@@ -42,7 +44,7 @@ export const RecordCondition: React.FC<RecordConditionProps> = ({ user }) => {
         }
 
         try {
-            const request = { userId: user.uid, healthScore: conditionScore, comment: conditionComment, };
+            const request = { userId: user.uid, healthScore: conditionScore, comment: conditionComment, timestamp: Math.floor(timestamp / 1000) };
             const response = await submitAddHealth(request);
             console.log(response);
             setSubmitSuccess(true);
@@ -58,7 +60,6 @@ export const RecordCondition: React.FC<RecordConditionProps> = ({ user }) => {
             setIsSubmitting(false);
         }
     };
-
     const isDisabled = isSubmitting || submitSuccess;
 
     return (
