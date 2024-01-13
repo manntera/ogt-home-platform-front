@@ -9,11 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@date-io/date-fns": "^3.0.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.3",
+    "@mui/lab": "^5.0.0-alpha.160",
     "@mui/material": "^5.14.20",
     "@mui/x-charts": "^6.18.3",
+    "@mui/x-date-pickers": "^6.19.0",
+    "dayjs": "^1.11.10",
     "firebase": "^10.6.0",
     "next": "^14.0.2",
     "queue-typescript": "^1.0.1",

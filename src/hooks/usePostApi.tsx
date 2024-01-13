@@ -32,6 +32,7 @@ export type HelathAddRequest = {
     userId: string;
     healthScore: number;
     comment: string;
+    timestamp: number;
 }
 
 export type HealthAddResponse = {
