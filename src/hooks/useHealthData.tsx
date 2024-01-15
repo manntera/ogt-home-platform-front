@@ -12,7 +12,6 @@ export const useHealthData = (year: number, month: number) => {
     useEffect(() => {
         const fetchHealthData = async () => {
             try {
-                console.log("useHealthData start");
                 setIsLoading(true);
                 const currentUser = getCurrentUser();
                 if (!currentUser) throw new Error('ユーザーが見つかりません。');
@@ -32,7 +31,6 @@ export const useHealthData = (year: number, month: number) => {
                 setHealthData(response);
             } catch (error) {
                 setError('体調情報の取得に失敗しました。');
-                console.log("useHealthData end");
             } finally {
                 setIsLoading(false);
             }

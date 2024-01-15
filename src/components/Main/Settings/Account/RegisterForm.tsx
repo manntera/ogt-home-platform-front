@@ -48,18 +48,14 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onBack, isSuccessReg
 
         try {
             await registerUser(email, password);
-            console.log(email);
 
             const currentUser = getCurrentUser();
-            console.log(currentUser);
 
             if (!currentUser) {
                 throw new Error('ユーザー情報が取得できませんでした');
             }
-            console.log(currentUser);
             const request = { id: currentUser.uid, name: userName, email: email }
             const response = await submitAddUser(request);
-            console.log(response);
 
             alert('アカウント作成成功');
             isSuccessRegister(true);

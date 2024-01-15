@@ -33,6 +33,13 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
 
     const [tileItemInfos, setTileItemInfos] = useState<TileItemInfo[][]>([]);
 
+    const handleTileClick = (columnIndex: number, tileIndex: number) => {
+        console.log(`Clicked on Tile at Column: ${columnIndex}, Tile: ${tileIndex}`);
+        if (tileItemInfos[columnIndex][tileIndex].toolTipText != null) {
+            // tileItemInfos[columnIndex][tileIndex]
+        }
+    };
+
     useEffect(() => {
         const firstDayOfMonth = new Date(year, month - 1, 1);
         const lastDayOfMonth = new Date(year, month);
@@ -139,6 +146,7 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
                 tileSizeY={20}
                 tileItemInfos={tileItemInfos}
                 margin={1}
+                onTileClick={handleTileClick}
             />
         </div>
     );

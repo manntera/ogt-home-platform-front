@@ -12,7 +12,6 @@ export const useUserData = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                console.log("useUserData start");
                 setIsLoading(true);
                 const currentUser = getCurrentUser();
                 if (!currentUser) throw new Error('ユーザーが見つかりません。');
@@ -20,7 +19,6 @@ export const useUserData = () => {
                 setUserData(userData);
             } catch (error) {
                 setError('ユーザー情報の取得に失敗しました。');
-                console.log("useUserData end");
             } finally {
                 setIsLoading(false);
             }

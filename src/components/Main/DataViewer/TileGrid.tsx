@@ -14,9 +14,10 @@ type Props = {
     tileSizeY: number;
     tileItemInfos: TileItemInfo[][];
     margin: number;
+    onTileClick?: (columnIndex: number, tileIndex: number) => void;
 };
 
-export const TileGrid: React.FC<Props> = ({ tileSizeX, tileSizeY, tileItemInfos, margin }) => {
+export const TileGrid: React.FC<Props> = ({ tileSizeX, tileSizeY, tileItemInfos, margin, onTileClick }) => {
     return (
         <div style={{ display: 'flex' }}>
             {tileItemInfos.map((column, columnIndex) => (
@@ -32,6 +33,11 @@ export const TileGrid: React.FC<Props> = ({ tileSizeX, tileSizeY, tileItemInfos,
                             outlineColor={tileItemInfo.outlineColor}
                             OutlineSize={tileItemInfo.outlineSize}
                             style={{ marginBottom: margin, marginRight: margin }}
+                            onClick={() => {
+                                if (onTileClick) {
+                                    onTileClick(columnIndex, tileIndex);
+                                }
+                            }}
                         />
                     ))}
                 </div>

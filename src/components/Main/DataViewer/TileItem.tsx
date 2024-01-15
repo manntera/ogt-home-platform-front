@@ -9,9 +9,10 @@ type Props = {
     outlineColor: string;
     OutlineSize: number;
     style: React.CSSProperties;
+    onClick: () => void;
 };
 
-export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, color, outlineColor, OutlineSize, style }) => {
+export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, color, outlineColor, OutlineSize, style, onClick }) => {
     return (
         <Tooltip title={toolTipText ?? ''} placement="top-end">
             <Box
@@ -25,6 +26,7 @@ export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, col
                     border: `${OutlineSize}px solid ${outlineColor}`,
                 }}
                 style={style}
+                onClick={onClick}
             >
                 <Typography sx={{ userSelect: 'none' }}>{text}</Typography>
             </Box>

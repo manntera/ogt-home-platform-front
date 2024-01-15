@@ -29,8 +29,7 @@ export const RecordCondition: React.FC<RecordConditionProps> = ({ user }) => {
 
         try {
             const request = { id: user.uid }
-            const response = await submitGetUser(request);
-            console.log(response);
+            await submitGetUser(request);
         }
         catch (error) {
             if (error instanceof Error) {
@@ -45,10 +44,8 @@ export const RecordCondition: React.FC<RecordConditionProps> = ({ user }) => {
 
         try {
             const timestampReq = Math.floor(date.getTime() / 1000);
-            console.log("BBB" + timestampReq);
             const request = { userId: user.uid, healthScore: conditionScore, comment: conditionComment, timestamp: timestampReq };
-            const response = await submitAddHealth(request);
-            console.log(response);
+            await submitAddHealth(request);
             setSubmitSuccess(true);
         } catch (error) {
             if (error instanceof Error) {
