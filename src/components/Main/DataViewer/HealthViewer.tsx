@@ -5,6 +5,7 @@ import { TileGrid, TileItemInfo } from './TileGrid';
 import { alpha, rgbToHex, hslToRgb } from '@mui/material';
 import { Queue } from 'queue-typescript';
 import { HealthGetResponse } from '@/hooks/usePostApi';
+import { HealthDetailViewer } from './HealthDetailViewer';
 
 const SECONDS_IN_DAY = 86400;
 const SECONDS_IN_HOUR = 3600;
@@ -33,11 +34,19 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
 
     const [tileItemInfos, setTileItemInfos] = useState<TileItemInfo[][]>([]);
 
+    const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
+    const [startUnixTime, setStartUnixTime] = useState<number>(0);
+    const [endUnixTime, setEndUnixTime] = useState<number>(0);
+
     const handleTileClick = (columnIndex: number, tileIndex: number) => {
         console.log(`Clicked on Tile at Column: ${columnIndex}, Tile: ${tileIndex}`);
-        if (tileItemInfos[columnIndex][tileIndex].toolTipText != null) {
-            // tileItemInfos[columnIndex][tileIndex]
-        }
+        const hour = tileIndex - 2;
+        const day = columnIndex + 1;
+        const startHourUnixTime = Math.floor(new Date(year, month, day, hour).getTime() / 1000);
+        const endHourUnixTime = startHourUnixTime + SECONDS_IN_HOUR;
+        setStartUnixTime(startHourUnixTime);
+        setEndUnixTime(endHourUnixTime);
+        setIsOpenDialog(true);
     };
 
     useEffect(() => {
@@ -148,6 +157,7 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
                 margin={1}
                 onTileClick={handleTileClick}
             />
+            <HealthDetailViewer onClickClose={() => setIsOpenDialog(false)} isOpenDialog={isOpenDialog} startUnixTime={startUnixTime} endUnixTime={endUnixTime} />
         </div>
     );
 }
