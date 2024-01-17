@@ -20,13 +20,11 @@ export const useHealthData = (year: number, month: number) => {
                 const lastDayOfMonth = new Date(year, month, 0); // 月末日の取得
                 const startTime = Math.floor(firstDayOfMonth.getTime() / 1000);
                 const endTime = Math.floor(lastDayOfMonth.getTime() / 1000);
-
                 const request: HealthGetRequest = {
                     userId: currentUser.uid,
                     startTime: startTime,
                     endTime: endTime
                 };
-
                 const response = await submitGetHealth(request);
                 setHealthData(response);
             } catch (error) {

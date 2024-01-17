@@ -42,7 +42,7 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
         console.log(`Clicked on Tile at Column: ${columnIndex}, Tile: ${tileIndex}`);
         const hour = tileIndex - 2;
         const day = columnIndex + 1;
-        const startHourUnixTime = Math.floor(new Date(year, month, day, hour).getTime() / 1000);
+        const startHourUnixTime = Math.floor(new Date(year, month - 1, day, hour).getTime() / 1000);
         const endHourUnixTime = startHourUnixTime + SECONDS_IN_HOUR;
         setStartUnixTime(startHourUnixTime);
         setEndUnixTime(endHourUnixTime);
@@ -157,7 +157,7 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
                 margin={1}
                 onTileClick={handleTileClick}
             />
-            <HealthDetailViewer onClickClose={() => setIsOpenDialog(false)} isOpenDialog={isOpenDialog} startUnixTime={startUnixTime} endUnixTime={endUnixTime} />
+            <HealthDetailViewer userId={userData ? userData.id : ""} onClickClose={() => setIsOpenDialog(false)} isOpenDialog={isOpenDialog} startUnixTime={startUnixTime} endUnixTime={endUnixTime} />
         </div>
     );
 }

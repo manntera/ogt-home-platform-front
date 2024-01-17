@@ -28,7 +28,7 @@ export type UserGetResponse = {
     name: string;
 }
 
-export type HelathAddRequest = {
+export type HealthAddRequest = {
     userId: string;
     healthScore: number;
     comment: string;
