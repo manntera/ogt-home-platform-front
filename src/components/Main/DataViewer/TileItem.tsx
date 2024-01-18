@@ -14,7 +14,7 @@ type Props = {
 
 export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, color, outlineColor, OutlineSize, style, onClick }) => {
     return (
-        <Tooltip title={toolTipText ?? ''} placement="top-end">
+        <Tooltip title={toolTipText ?? ''} placement="top-end" enterTouchDelay={0}>
             <Box
                 sx={{
                     width: sizex,
