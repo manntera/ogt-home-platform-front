@@ -40,6 +40,10 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
 
     const handleTileClick = (columnIndex: number, tileIndex: number) => {
         console.log(`Clicked on Tile at Column: ${columnIndex}, Tile: ${tileIndex}`);
+        if (tileItemInfos[columnIndex][tileIndex].text == "") {
+            return;
+        }
+
         const hour = tileIndex - 2;
         const day = columnIndex + 1;
         const startHourUnixTime = Math.floor(new Date(year, month - 1, day, hour).getTime() / 1000);
