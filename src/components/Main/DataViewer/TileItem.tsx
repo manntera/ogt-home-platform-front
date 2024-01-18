@@ -1,5 +1,5 @@
 import { Box, Tooltip, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
     sizex: number;
@@ -10,16 +10,34 @@ type Props = {
     outlineColor: string;
     OutlineSize: number;
     style: React.CSSProperties;
-    onClick: () => void;
+    onLongPress?: () => void;
+    onPress?: () => void;
 };
 
-export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, color, outlineColor, OutlineSize, style, onClick }) => {
+export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, color, outlineColor, OutlineSize, style, onLongPress, onPress }) => {
     const [open, setOpen] = useState(false);
+    const [pressStart, setPressStart] = useState<number>(0);
 
-    const onTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
-        setOpen(true);
-        setTimeout(() => setOpen(false), 5000);
+    const handleTouchStart = () => {
+        setPressStart(Date.now());
     };
+
+    const handleTouchEnd = () => {
+        const pressDuration = Date.now() - pressStart;
+        if (pressDuration < 1000) {
+            setOpen(true);
+            setTimeout(() => setOpen(false), 5000);
+            if (onPress) {
+                onPress();
+            }
+        } else {
+            if (onLongPress) {
+                onLongPress();
+            }
+        }
+        setPressStart(0);
+    };
+
 
     return (
         <Tooltip
@@ -41,8 +59,11 @@ export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, col
                     border: `${OutlineSize}px solid ${outlineColor}`,
                 }}
                 style={style}
-                onClick={onClick}
-                onTouchEnd={onTouchEnd}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                onTouchCancel={handleTouchEnd}
+                onMouseDown={handleTouchStart}
+                onMouseUp={handleTouchEnd}
             >
                 <Typography sx={{ userSelect: 'none' }}>{text}</Typography>
             </Box>
