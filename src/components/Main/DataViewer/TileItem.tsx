@@ -1,4 +1,5 @@
 import { Box, Tooltip, Typography } from '@mui/material';
+import { useState } from 'react';
 
 type Props = {
     sizex: number;
@@ -48,7 +49,3 @@ export const TileItem: React.FC<Props> = ({ sizex, sizey, text, toolTipText, col
         </Tooltip>
     );
 };
-function useState(arg0: boolean): [any, any] {
-    throw new Error('Function not implemented.');
-}
-
