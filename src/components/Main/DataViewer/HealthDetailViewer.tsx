@@ -13,6 +13,7 @@ import {
     List,
     ListItem,
     ListItemText,
+    Typography,
 } from "@mui/material";
 
 import IconButton from "@mui/material/IconButton";
@@ -84,7 +85,7 @@ export const HealthDetailViewer: React.FC<Props> = ({
     return (
         <Dialog open={isOpenDialog} onClose={handleClose} fullWidth={true}>
             <DialogTitle>
-                {targetMonth}月{targetDay}日 {targetHour}時の健康情報
+                {targetMonth + 1}月{targetDay}日 {targetHour}時の健康情報
             </DialogTitle>
             <DialogContent>
                 <List>
@@ -95,29 +96,68 @@ export const HealthDetailViewer: React.FC<Props> = ({
                             .getMinutes()
                             .toString()
                             .padStart(2, "0");
+
                         return (
-                            <ListItem key={index}>
+                            <ListItem
+                                key={index}
+                                sx={{
+                                    mb: 1,
+                                    borderBottom: "1px solid #ddd",
+                                    alignItems: "flex-start",
+                                }}
+                            >
                                 <ListItemText
                                     primary={`${hours}:${minutes}`}
-                                    secondary={`【体調】 ${
-                                        item.healthScore
-                                    }【コメント】${
-                                        item.comment || "コメントなし"
-                                    }`}
+                                    secondary={
+                                        <>
+                                            <Typography
+                                                variant="body2"
+                                                component="span"
+                                            >
+                                                {`【体調】 ${item.healthScore}`}
+                                            </Typography>
+                                            <br />
+                                            <Typography
+                                                variant="body2"
+                                                color="textSecondary"
+                                            >
+                                                {`【コメント】 ${
+                                                    item.comment ||
+                                                    "コメントなし"
+                                                }`}
+                                            </Typography>
+                                        </>
+                                    }
+                                    sx={{ mr: 2 }}
                                 />
-                                <IconButton onClick={() => handleEdit(item.id)}>
-                                    <EditIcon />
-                                </IconButton>
-                                <IconButton
-                                    onClick={() => handleDelete(item.id)}
+                                <div
+                                    style={{
+                                        marginLeft: "auto",
+                                        display: "flex",
+                                        alignItems: "center",
+                                    }}
                                 >
-                                    <DeleteIcon />
-                                </IconButton>
+                                    <IconButton
+                                        onClick={() => handleEdit(item.id)}
+                                        size="large"
+                                        color="primary"
+                                    >
+                                        <EditIcon />
+                                    </IconButton>
+                                    <IconButton
+                                        onClick={() => handleDelete(item.id)}
+                                        size="large"
+                                        color="secondary"
+                                    >
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </div>
                             </ListItem>
                         );
                     })}
                 </List>
             </DialogContent>
+
             <DialogActions>
                 <Button onClick={onClickClose} color="primary">
                     OK
