@@ -14,6 +14,11 @@ import {
     ListItem,
     ListItemText,
 } from "@mui/material";
+
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -47,7 +52,15 @@ export const HealthDetailViewer: React.FC<Props> = ({
         setHealthData([]);
         onClickClose();
     };
+    const handleEdit = (itemId: string) => {
+        console.log("編集: ", itemId);
+        // 編集処理...
+    };
 
+    const handleDelete = (itemId: string) => {
+        console.log("削除: ", itemId);
+        // 削除処理...
+    };
     useEffect(() => {
         const fetchHealthData = async () => {
             if (startUnixTime === 0 || endUnixTime === 0) {
@@ -92,6 +105,14 @@ export const HealthDetailViewer: React.FC<Props> = ({
                                         item.comment || "コメントなし"
                                     }`}
                                 />
+                                <IconButton onClick={() => handleEdit(item.id)}>
+                                    <EditIcon />
+                                </IconButton>
+                                <IconButton
+                                    onClick={() => handleDelete(item.id)}
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
                             </ListItem>
                         );
                     })}
