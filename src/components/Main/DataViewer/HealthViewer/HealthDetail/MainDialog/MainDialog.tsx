@@ -8,16 +8,9 @@ import {
     Button,
 } from "@mui/material";
 import { ControlPanel } from "./ControlPanel";
-import {
-    HealthDeleteApiUrl,
-    HealthDeleteRequest,
-    HealthDeleteResponse,
-    HealthGetResponse,
-    usePostApi,
-} from "@/hooks/usePostApi";
+import { HealthGetResponse } from "@/hooks/usePostApi";
 import { TextPanel } from "./TextPanel";
 import { useEffect, useState } from "react";
-import { DeleteConfirmationDialog } from "./DeleteConfirmationDialog";
 
 type Props = {
     isOpenDialog: boolean;
@@ -27,22 +20,20 @@ type Props = {
     targetHour: number;
     healthData: HealthGetResponse[];
     handleClose: () => void;
+    handleOpenDeleteConfirmDialog: (itemId: string) => void;
+    handleOpenEditDialog: (itemId: string) => void;
 };
 
 export const MainDialog: React.FC<Props> = ({
     isOpenDialog,
-    userId,
     targetMonth,
     targetDay,
     targetHour,
     healthData,
     handleClose,
+    handleOpenDeleteConfirmDialog,
+    handleOpenEditDialog,
 }) => {
-    const { submitData: submitDeleteHealth } = usePostApi<
-        HealthDeleteRequest,
-        HealthDeleteResponse
-    >(HealthDeleteApiUrl);
-
     const [displayHealthData, setDisplayHealthData] =
         useState<HealthGetResponse[]>(healthData);
 
@@ -52,40 +43,6 @@ export const MainDialog: React.FC<Props> = ({
 
     const handleEdit = (itemId: string) => {
         console.log("編集: ", itemId);
-    };
-
-    const handleDelete = async (itemId: string) => {
-        console.log("削除: ", itemId);
-        try {
-            const response = await submitDeleteHealth({
-                uuid: itemId,
-                userId: userId,
-            });
-            console.log(response);
-            setDisplayHealthData(
-                displayHealthData.filter((item) => item.id !== response.id)
-            );
-        } catch (error) {
-            console.error("削除処理でエラーが発生しました", error);
-        }
-    };
-
-    const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
-    const [deleteItemId, setDeleteItemId] = useState<string | null>(null);
-    const handleOpenConfirmDialog = (itemId: string) => {
-        setDeleteItemId(itemId);
-        setOpenConfirmDialog(true);
-    };
-
-    const handleCloseConfirmDialog = () => {
-        setOpenConfirmDialog(false);
-    };
-
-    const handleConfirmDelete = async () => {
-        if (deleteItemId) {
-            await handleDelete(deleteItemId);
-            handleCloseConfirmDialog();
-        }
     };
 
     return (
@@ -118,8 +75,14 @@ export const MainDialog: React.FC<Props> = ({
                                         comment={item.comment}
                                     />
                                     <ControlPanel
-                                        handleEdit={handleEdit}
-                                        handleDelete={handleOpenConfirmDialog}
+                                        handleEdit={() =>
+                                            handleOpenEditDialog(item.id)
+                                        }
+                                        handleDelete={() =>
+                                            handleOpenDeleteConfirmDialog(
+                                                item.id
+                                            )
+                                        }
                                         id={item.id}
                                     />
                                 </ListItem>
@@ -134,11 +97,6 @@ export const MainDialog: React.FC<Props> = ({
                     </Button>
                 </DialogActions>
             </Dialog>
-            <DeleteConfirmationDialog
-                isOpen={openConfirmDialog}
-                onClose={handleCloseConfirmDialog}
-                onConfirm={handleConfirmDelete}
-            />
         </>
     );
 };
