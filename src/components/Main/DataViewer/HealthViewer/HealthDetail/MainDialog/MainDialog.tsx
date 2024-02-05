@@ -17,6 +17,7 @@ import {
 } from "@/hooks/usePostApi";
 import { TextPanel } from "./TextPanel";
 import { useEffect, useState } from "react";
+import { DeleteConfirmationDialog } from "./DeleteConfirmationDialog";
 
 type Props = {
     isOpenDialog: boolean;
@@ -68,50 +69,76 @@ export const MainDialog: React.FC<Props> = ({
             console.error("削除処理でエラーが発生しました", error);
         }
     };
-    return (
-        <Dialog open={isOpenDialog} onClose={handleClose} fullWidth={true}>
-            <DialogTitle>
-                {targetMonth + 1}月{targetDay}日 {targetHour}時の健康情報
-            </DialogTitle>
-            <DialogContent>
-                <List>
-                    {displayHealthData.map((item, index) => {
-                        const date = new Date(item.timestamp * 1000);
-                        const minutes = date
-                            .getMinutes()
-                            .toString()
-                            .padStart(2, "0");
-                        return (
-                            <ListItem
-                                key={index}
-                                sx={{
-                                    mb: 1,
-                                    borderBottom: "1px solid #ddd",
-                                    alignItems: "flex-start",
-                                }}
-                            >
-                                <TextPanel
-                                    hour={targetHour}
-                                    minute={minutes}
-                                    healthScore={item.healthScore}
-                                    comment={item.comment}
-                                />
-                                <ControlPanel
-                                    handleEdit={handleEdit}
-                                    handleDelete={handleDelete}
-                                    id={item.id}
-                                />
-                            </ListItem>
-                        );
-                    })}
-                </List>
-            </DialogContent>
 
-            <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                    OK
-                </Button>
-            </DialogActions>
-        </Dialog>
+    const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+    const [deleteItemId, setDeleteItemId] = useState<string | null>(null);
+    const handleOpenConfirmDialog = (itemId: string) => {
+        setDeleteItemId(itemId);
+        setOpenConfirmDialog(true);
+    };
+
+    const handleCloseConfirmDialog = () => {
+        setOpenConfirmDialog(false);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (deleteItemId) {
+            await handleDelete(deleteItemId);
+            handleCloseConfirmDialog();
+        }
+    };
+
+    return (
+        <>
+            <Dialog open={isOpenDialog} onClose={handleClose} fullWidth={true}>
+                <DialogTitle>
+                    {targetMonth + 1}月{targetDay}日 {targetHour}時の健康情報
+                </DialogTitle>
+                <DialogContent>
+                    <List>
+                        {displayHealthData.map((item, index) => {
+                            const date = new Date(item.timestamp * 1000);
+                            const minutes = date
+                                .getMinutes()
+                                .toString()
+                                .padStart(2, "0");
+                            return (
+                                <ListItem
+                                    key={index}
+                                    sx={{
+                                        mb: 1,
+                                        borderBottom: "1px solid #ddd",
+                                        alignItems: "flex-start",
+                                    }}
+                                >
+                                    <TextPanel
+                                        hour={targetHour}
+                                        minute={minutes}
+                                        healthScore={item.healthScore}
+                                        comment={item.comment}
+                                    />
+                                    <ControlPanel
+                                        handleEdit={handleEdit}
+                                        handleDelete={handleOpenConfirmDialog}
+                                        id={item.id}
+                                    />
+                                </ListItem>
+                            );
+                        })}
+                    </List>
+                </DialogContent>
+
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        OK
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <DeleteConfirmationDialog
+                isOpen={openConfirmDialog}
+                onClose={handleCloseConfirmDialog}
+                onConfirm={handleConfirmDelete}
+            />
+        </>
     );
 };

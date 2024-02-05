@@ -7,7 +7,7 @@ import {
 } from "@/hooks/usePostApi";
 import { getCurrentUser } from "@/lib/firebase/firebaseAuth";
 
-export const useHealthData = (year: number, month: number) => {
+export const useMonthHealthData = (year: number, month: number) => {
     const { submitData: submitGetHealth } = usePostApi<
         HealthGetRequest,
         HealthGetResponse[]

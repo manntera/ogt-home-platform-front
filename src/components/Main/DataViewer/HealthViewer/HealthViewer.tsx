@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useUserData } from "@/hooks/useUserData";
-import { useHealthData } from "@/hooks/useHealthData";
+import { useMonthHealthData } from "@/hooks/useMonthHealthData";
 import { TileGrid, TileItemInfo } from "./GridViewer/TileGrid";
 import { alpha, rgbToHex, hslToRgb } from "@mui/material";
 import { Queue } from "queue-typescript";
@@ -40,7 +40,7 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
         error: healthError,
         isLoading: isHealthLoading,
         refetch: refetchHealthData,
-    } = useHealthData(year, month);
+    } = useMonthHealthData(year, month);
 
     const [tileItemInfos, setTileItemInfos] = useState<TileItemInfo[][]>([]);
 

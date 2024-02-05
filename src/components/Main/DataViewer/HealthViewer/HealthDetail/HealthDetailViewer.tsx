@@ -18,7 +18,7 @@ type Props = {
 };
 
 export const HealthDetailViewer: React.FC<Props> = ({
-    onClose: onClose,
+    onClose,
     isOpenDialog,
     startUnixTime,
     endUnixTime,
