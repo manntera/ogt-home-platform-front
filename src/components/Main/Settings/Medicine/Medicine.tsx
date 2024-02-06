@@ -56,18 +56,5 @@ export const Medicine: React.FC<Props> = ({ onBack }) => {
                 );
         }
     };
-    return (
-        <Box
-            style={{
-                position: "absolute",
-                display: "flex",
-                inset: 0,
-                alignItems: "center",
-                flexDirection: "column",
-                justifyContent: "center",
-            }}
-        >
-            {renderCurrentMenu()}
-        </Box>
-    );
+    return renderCurrentMenu();
 };

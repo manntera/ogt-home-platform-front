@@ -16,7 +16,16 @@ export const MainMenu: React.FC<Props> = ({
     onBack,
 }) => {
     return (
-        <>
+        <Box
+            style={{
+                position: "absolute",
+                display: "flex",
+                inset: 0,
+                alignItems: "center",
+                flexDirection: "column",
+                justifyContent: "center",
+            }}
+        >
             <Grid
                 container
                 spacing={2}
@@ -36,6 +45,6 @@ export const MainMenu: React.FC<Props> = ({
                 </Grid>
             </Grid>
             <BackButton onBack={() => onBack()} />
-        </>
+        </Box>
     );
 };
