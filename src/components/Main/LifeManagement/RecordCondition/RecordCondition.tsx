@@ -3,7 +3,7 @@ import { User } from 'firebase/auth';
 import { LifeScoreSlider } from './LifeScoreSlider';
 import { CommentTextArea } from './CommentTextArea';
 import { SendButton } from './SendButton';
-import { usePostApi, UserGetRequest, UserGetResponse, HelathAddRequest, HealthAddResponse, UserApiUrl, HealthApiUrl } from '@/hooks/usePostApi';
+import { usePostApi, UserGetRequest, UserGetResponse, HealthAddRequest, HealthAddResponse, UserApiUrl, HealthApiUrl } from '@/hooks/usePostApi';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
@@ -20,7 +20,7 @@ export const RecordCondition: React.FC<RecordConditionProps> = ({ user }) => {
     const [submitError, setSubmitError] = useState('');
 
     const { submitData: submitGetUser } = usePostApi<UserGetRequest, UserGetResponse>(UserApiUrl + "get");
-    const { submitData: submitAddHealth } = usePostApi<HelathAddRequest, HealthAddResponse>(HealthApiUrl + "add");
+    const { submitData: submitAddHealth } = usePostApi<HealthAddRequest, HealthAddResponse>(HealthApiUrl + "add");
 
     const handleSubmit = async (date: Date) => {
         setIsSubmitting(true);

@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import { HealthViewer } from './HealthViewer';
-import { Grid, Button, Typography, IconButton } from '@mui/material';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
-
+import { useState } from "react";
+import { HealthViewer } from "./HealthViewer/HealthViewer";
+import { Grid, Typography, IconButton } from "@mui/material";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIos from "@mui/icons-material/ArrowForwardIos";
 
 export const DataViewer = () => {
     const [year, setYear] = useState<number>(new Date().getFullYear());
@@ -32,7 +31,12 @@ export const DataViewer = () => {
 
     return (
         <div>
-            <Grid container spacing={2} justifyContent="center" alignItems="center">
+            <Grid
+                container
+                spacing={2}
+                justifyContent="center"
+                alignItems="center"
+            >
                 <Grid item>
                     <IconButton onClick={decrementYear} size="large">
                         <ArrowBackIosNewIcon />
@@ -44,7 +48,9 @@ export const DataViewer = () => {
                     </IconButton>
                 </Grid>
                 <Grid item>
-                    <Typography variant="h6">{year}年 {month}月</Typography>
+                    <Typography variant="h6">
+                        {year}年 {month}月
+                    </Typography>
                 </Grid>
                 <Grid item>
                     <IconButton onClick={incrementMonth} size="large">
@@ -60,4 +66,4 @@ export const DataViewer = () => {
             <HealthViewer year={year} month={month} />
         </div>
     );
-}
+};

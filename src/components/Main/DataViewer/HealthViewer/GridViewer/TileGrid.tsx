@@ -33,7 +33,7 @@ export const TileGrid: React.FC<Props> = ({ tileSizeX, tileSizeY, tileItemInfos,
                             outlineColor={tileItemInfo.outlineColor}
                             OutlineSize={tileItemInfo.outlineSize}
                             style={{ marginBottom: margin, marginRight: margin }}
-                            onClick={() => {
+                            onLongPress={() => {
                                 if (onTileClick) {
                                     onTileClick(columnIndex, tileIndex);
                                 }
