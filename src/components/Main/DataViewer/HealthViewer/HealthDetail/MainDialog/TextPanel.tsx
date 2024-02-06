@@ -27,6 +27,7 @@ export const TextPanel: React.FC<Props> = ({
                     </Typography>
                 </>
             }
+            disableTypography={true}
             sx={{ mr: 2 }}
         />
     );

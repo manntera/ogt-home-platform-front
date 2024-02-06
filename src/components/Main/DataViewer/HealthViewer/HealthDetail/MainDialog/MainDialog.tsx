@@ -6,6 +6,8 @@ import {
     ListItem,
     DialogActions,
     Button,
+    CircularProgress,
+    Box,
 } from "@mui/material";
 import { ControlPanel } from "./ControlPanel";
 import { HealthGetResponse } from "@/hooks/usePostApi";
@@ -14,6 +16,7 @@ import { useEffect, useState } from "react";
 
 type Props = {
     isOpenDialog: boolean;
+    isLoading: boolean;
     userId: string;
     targetMonth: number;
     targetDay: number;
@@ -26,6 +29,7 @@ type Props = {
 
 export const MainDialog: React.FC<Props> = ({
     isOpenDialog,
+    isLoading,
     targetMonth,
     targetDay,
     targetHour,
@@ -39,11 +43,8 @@ export const MainDialog: React.FC<Props> = ({
 
     useEffect(() => {
         setDisplayHealthData(healthData);
+        console.log("更新");
     }, [healthData]);
-
-    const handleEdit = (itemId: string) => {
-        console.log("編集: ", itemId);
-    };
 
     return (
         <>
@@ -52,43 +53,61 @@ export const MainDialog: React.FC<Props> = ({
                     {targetMonth + 1}月{targetDay}日 {targetHour}時の健康情報
                 </DialogTitle>
                 <DialogContent>
-                    <List>
-                        {displayHealthData.map((item, index) => {
-                            const date = new Date(item.timestamp * 1000);
-                            const minutes = date
-                                .getMinutes()
-                                .toString()
-                                .padStart(2, "0");
-                            return (
-                                <ListItem
-                                    key={index}
-                                    sx={{
-                                        mb: 1,
-                                        borderBottom: "1px solid #ddd",
-                                        alignItems: "flex-start",
-                                    }}
-                                >
-                                    <TextPanel
-                                        hour={targetHour}
-                                        minute={minutes}
-                                        healthScore={item.healthScore}
-                                        comment={item.comment}
-                                    />
-                                    <ControlPanel
-                                        handleEdit={() =>
-                                            handleOpenEditDialog(item.id)
-                                        }
-                                        handleDelete={() =>
-                                            handleOpenDeleteConfirmDialog(
-                                                item.id
-                                            )
-                                        }
-                                        id={item.id}
-                                    />
-                                </ListItem>
-                            );
-                        })}
-                    </List>
+                    {isLoading ? (
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                backgroundColor: "rgba(255, 255, 255, 0.7)",
+                            }}
+                        >
+                            <CircularProgress />
+                        </Box>
+                    ) : (
+                        <List>
+                            {displayHealthData.map((item, index) => {
+                                const date = new Date(item.timestamp * 1000);
+                                const minutes = date
+                                    .getMinutes()
+                                    .toString()
+                                    .padStart(2, "0");
+                                return (
+                                    <ListItem
+                                        key={index}
+                                        sx={{
+                                            mb: 1,
+                                            borderBottom: "1px solid #ddd",
+                                            alignItems: "flex-start",
+                                        }}
+                                    >
+                                        <TextPanel
+                                            hour={targetHour}
+                                            minute={minutes}
+                                            healthScore={item.healthScore}
+                                            comment={item.comment}
+                                        />
+                                        <ControlPanel
+                                            handleEdit={() =>
+                                                handleOpenEditDialog(item.id)
+                                            }
+                                            handleDelete={() =>
+                                                handleOpenDeleteConfirmDialog(
+                                                    item.id
+                                                )
+                                            }
+                                            id={item.id}
+                                        />
+                                    </ListItem>
+                                );
+                            })}
+                        </List>
+                    )}
                 </DialogContent>
 
                 <DialogActions>
