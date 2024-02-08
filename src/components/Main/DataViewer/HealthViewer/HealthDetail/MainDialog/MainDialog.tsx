@@ -90,6 +90,7 @@ export const MainDialog: React.FC<Props> = ({
                                             minute={minutes}
                                             healthScore={item.healthScore}
                                             comment={item.comment}
+                                            medicineName={item.medicineName}
                                         />
                                         <ControlPanel
                                             handleEdit={() =>

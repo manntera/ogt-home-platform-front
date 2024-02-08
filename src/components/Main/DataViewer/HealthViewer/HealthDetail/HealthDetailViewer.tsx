@@ -111,7 +111,8 @@ export const HealthDetailViewer: React.FC<Props> = ({
     const handleEdit = async (
         comment: string,
         score: number,
-        timestamp: number
+        timestamp: number,
+        medicineName: string
     ) => {
         if (editItemId) {
             try {
@@ -122,6 +123,7 @@ export const HealthDetailViewer: React.FC<Props> = ({
                     timestamp: timestamp,
                     healthScore: score,
                     comment: comment,
+                    medicineName: medicineName,
                 });
                 await submitDeleteHealth({
                     uuid: editItemId,
