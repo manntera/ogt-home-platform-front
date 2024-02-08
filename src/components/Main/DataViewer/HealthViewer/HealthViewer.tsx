@@ -94,6 +94,8 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
                 toolTipText: null,
                 outlineColor: "#000000",
                 outlineSize: 0,
+                subText: "",
+                subTextBgColor: "",
             });
             const weekDay = (firstWeekDay + dayIndex) % 7;
 
@@ -103,6 +105,8 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
                 toolTipText: null,
                 outlineColor: "#000000",
                 outlineSize: 0,
+                subText: "",
+                subTextBgColor: "",
             });
             for (var hourIndex = 0; hourIndex < HOURS_IN_DAY; hourIndex++) {
                 if (healthQueue.length == 0) {
@@ -112,6 +116,8 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
                         toolTipText: null,
                         outlineColor: "#000000",
                         outlineSize: 0,
+                        subText: "",
+                        subTextBgColor: "",
                     });
                     searchStartTime += SECONDS_IN_HOUR;
                     searchEndTime += SECONDS_IN_HOUR;
@@ -125,6 +131,8 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
                         toolTipText: null,
                         outlineColor: "#000000",
                         outlineSize: 0,
+                        subText: "",
+                        subTextBgColor: "",
                     });
                     searchStartTime += SECONDS_IN_HOUR;
                     searchEndTime += SECONDS_IN_HOUR;
@@ -160,6 +168,8 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
                     toolTipText: targetHealth.comment,
                     outlineColor: outlineColor,
                     outlineSize: outlineSize,
+                    subText: targetHealth.medicineName,
+                    subTextBgColor: "rgba(255, 255, 255, 1)",
                 });
                 searchStartTime += SECONDS_IN_HOUR;
                 searchEndTime += SECONDS_IN_HOUR;
@@ -192,21 +202,25 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
         );
     }
 
-    const nullTile = {
+    const nullTile: TileItemInfo = {
         text: "",
         color: alpha("#000000", 0),
         toolTipText: null,
         outlineColor: "#000000",
         outlineSize: 0,
+        subText: "",
+        subTextBgColor: "",
     };
 
-    const hourTile = (hour: { toString: () => string }) => {
+    const hourTile = (hour: { toString: () => string }): TileItemInfo => {
         return {
-            text: hour + "時",
+            text: hour.toString() + "時",
             color: alpha("#000000", 0),
             toolTipText: null,
             outlineColor: "#000000",
             outlineSize: 0,
+            subText: "",
+            subTextBgColor: "",
         };
     };
 

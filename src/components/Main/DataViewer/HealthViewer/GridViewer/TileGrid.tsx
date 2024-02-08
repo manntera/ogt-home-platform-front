@@ -1,5 +1,5 @@
-import React from 'react';
-import { TileItem } from './TileItem';
+import React from "react";
+import { TileItem } from "./TileItem";
 
 export type TileItemInfo = {
     text: string;
@@ -7,6 +7,8 @@ export type TileItemInfo = {
     toolTipText: string | null;
     outlineColor: string;
     outlineSize: number;
+    subText: string;
+    subTextBgColor: string;
 };
 
 type Props = {
@@ -17,27 +19,45 @@ type Props = {
     onTileClick?: (columnIndex: number, tileIndex: number) => void;
 };
 
-export const TileGrid: React.FC<Props> = ({ tileSizeX, tileSizeY, tileItemInfos, margin, onTileClick }) => {
+export const TileGrid: React.FC<Props> = ({
+    tileSizeX,
+    tileSizeY,
+    tileItemInfos,
+    margin,
+    onTileClick,
+}) => {
     return (
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: "flex" }}>
             {tileItemInfos.map((column, columnIndex) => (
-                <div key={columnIndex} style={{ display: 'flex', flexDirection: 'column' }}>
+                <div
+                    key={columnIndex}
+                    style={{ display: "flex", flexDirection: "column" }}
+                >
                     {column.map((tileItemInfo, tileIndex) => (
                         <TileItem
                             key={tileIndex}
                             sizex={tileSizeX}
                             sizey={tileSizeY}
                             text={tileItemInfo.text}
-                            toolTipText={tileItemInfo.toolTipText === null ? null : tileItemInfo?.toolTipText}
+                            toolTipText={
+                                tileItemInfo.toolTipText === null
+                                    ? null
+                                    : tileItemInfo?.toolTipText
+                            }
                             color={tileItemInfo.color}
                             outlineColor={tileItemInfo.outlineColor}
                             OutlineSize={tileItemInfo.outlineSize}
-                            style={{ marginBottom: margin, marginRight: margin }}
+                            style={{
+                                marginBottom: margin,
+                                marginRight: margin,
+                            }}
                             onLongPress={() => {
                                 if (onTileClick) {
                                     onTileClick(columnIndex, tileIndex);
                                 }
                             }}
+                            subText={tileItemInfo.subText}
+                            subTextBgColor={tileItemInfo.subTextBgColor}
                         />
                     ))}
                 </div>

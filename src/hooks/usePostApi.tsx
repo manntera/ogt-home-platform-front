@@ -61,6 +61,7 @@ export type HealthGetResponse = {
     timestamp: number;
     healthScore: number;
     comment: string;
+    medicineName: string;
 };
 
 export const HealthDeleteApiUrl = `${HealthApiUrl}delete`;
