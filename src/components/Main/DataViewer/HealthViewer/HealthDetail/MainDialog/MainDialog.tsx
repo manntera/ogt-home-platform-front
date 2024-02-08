@@ -43,7 +43,6 @@ export const MainDialog: React.FC<Props> = ({
 
     useEffect(() => {
         setDisplayHealthData(healthData);
-        console.log("更新");
     }, [healthData]);
 
     return (

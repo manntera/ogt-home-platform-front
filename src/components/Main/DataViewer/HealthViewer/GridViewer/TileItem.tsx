@@ -1,4 +1,4 @@
-import { Box, Tooltip, Typography, Avatar } from "@mui/material";
+import { Box, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 
 type Props = {
@@ -83,6 +83,7 @@ export const TileItem: React.FC<Props> = ({
                 {subText && (
                     <Typography
                         sx={{
+                            textAlign: "center",
                             fontWeight: "bold",
                             position: "absolute",
                             top: `${-sizex / 4}px`,
@@ -90,9 +91,10 @@ export const TileItem: React.FC<Props> = ({
                             fontSize: "0.6rem",
                             color: "text.primary",
                             userSelect: "none",
-                            width: sizex * 0.85,
-                            height: sizey * 0.45,
+                            width: sizex * 0.45,
+                            height: sizey * 0.85,
                             backgroundColor: subTextBgColor,
+                            lineHeight: "1",
                         }}
                     >
                         {subText}
