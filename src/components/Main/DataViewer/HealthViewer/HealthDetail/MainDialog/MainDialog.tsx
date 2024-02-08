@@ -43,7 +43,6 @@ export const MainDialog: React.FC<Props> = ({
 
     useEffect(() => {
         setDisplayHealthData(healthData);
-        console.log("更新");
     }, [healthData]);
 
     return (
@@ -91,6 +90,7 @@ export const MainDialog: React.FC<Props> = ({
                                             minute={minutes}
                                             healthScore={item.healthScore}
                                             comment={item.comment}
+                                            medicineName={item.medicineName}
                                         />
                                         <ControlPanel
                                             handleEdit={() =>
