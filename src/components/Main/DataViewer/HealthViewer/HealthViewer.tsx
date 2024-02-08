@@ -169,7 +169,7 @@ export const HealthViewer: React.FC<Props> = ({ year, month }) => {
                     outlineColor: outlineColor,
                     outlineSize: outlineSize,
                     subText: targetHealth.medicineName,
-                    subTextBgColor: "rgba(255, 255, 255, 1)",
+                    subTextBgColor: "rgba(255, 255, 255, 0.6)",
                 });
                 searchStartTime += SECONDS_IN_HOUR;
                 searchEndTime += SECONDS_IN_HOUR;

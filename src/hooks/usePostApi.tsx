@@ -42,12 +42,14 @@ export type HealthAddRequest = {
     healthScore: number;
     comment: string;
     timestamp: number;
+    medicineName: string;
 };
 export type HealthAddResponse = {
     id: string;
     timestamp: number;
     healthScore: number;
     comment: string;
+    medicineName: string;
 };
 
 export const HealthGetApiUrl = `${HealthApiUrl}get`;
@@ -74,6 +76,7 @@ export type HealthDeleteResponse = {
     timestamp: number;
     healthScore: number;
     comment: string;
+    medicineName: string;
 };
 
 export const usePostApi = <PayloadType, ResponseType>(apiUrl: string) => {

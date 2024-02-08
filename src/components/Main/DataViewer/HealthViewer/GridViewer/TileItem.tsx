@@ -87,11 +87,11 @@ export const TileItem: React.FC<Props> = ({
                             position: "absolute",
                             top: `${-sizex / 4}px`,
                             left: `${-sizex / 4.7}px`,
-                            fontSize: "0.53rem",
+                            fontSize: "0.6rem",
                             color: "text.primary",
                             userSelect: "none",
-                            width: sizex * 0.8,
-                            height: sizey * 0.5,
+                            width: sizex * 0.85,
+                            height: sizey * 0.45,
                             backgroundColor: subTextBgColor,
                         }}
                     >
